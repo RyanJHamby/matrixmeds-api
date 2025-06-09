@@ -1,0 +1,70 @@
+pipeline {
+    agent any
+    
+    environment {
+        AWS_REGION = 'us-east-1'
+        ECR_REPOSITORY = 'matrixmeds-api'
+        ECS_CLUSTER = 'matrixmeds-cluster'
+        ECS_SERVICE = 'matrixmeds-api-service'
+        ECS_TASK_DEFINITION = 'matrixmeds-api-task'
+    }
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        
+        stage('Install Dependencies') {
+            steps {
+                sh 'pip install -r requirements.txt'
+            }
+        }
+        
+        stage('Run Tests') {
+            steps {
+                sh 'pytest tests/'
+            }
+        }
+        
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    docker.build("${ECR_REPOSITORY}:${BUILD_NUMBER}")
+                }
+            }
+        }
+        
+        stage('Push to ECR') {
+            steps {
+                script {
+                    docker.withRegistry('https://${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com', 'ecr:us-east-1:aws-credentials') {
+                        docker.image("${ECR_REPOSITORY}:${BUILD_NUMBER}").push()
+                    }
+                }
+            }
+        }
+        
+        stage('Deploy to ECS') {
+            steps {
+                script {
+                    sh """
+                        aws ecs update-service --cluster ${ECS_CLUSTER} \
+                            --service ${ECS_SERVICE} \
+                            --force-new-deployment
+                    """
+                }
+            }
+        }
+    }
+    
+    post {
+        always {
+            cleanWs()
+        }
+        failure {
+            echo 'Pipeline failed!'
+        }
+    }
+} 
