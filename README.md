@@ -5,80 +5,100 @@ A FastAPI-based service for checking medication interactions.
 ## Features
 
 - Medication interaction checking
-- AWS Cognito authentication
-- DynamoDB storage
-- Docker containerization
-- CI/CD pipeline with Jenkins
+- User authentication via AWS Cognito
+- Data persistence with DynamoDB
+- Containerized deployment with AWS ECS Fargate
+- Auto-scaling and load balancing
+- Cost-optimized with Fargate Spot
 
 ## Prerequisites
 
-- Python 3.11+
+- Python 3.9+
 - Docker
-- AWS Account with appropriate permissions
-- Jenkins server (for CI/CD)
+- AWS CLI configured with appropriate credentials
+- AWS CDK installed (`npm install -g aws-cdk`)
 
 ## Setup
 
-1. Clone the repository:
-```bash
-git clone https://github.com/yourusername/matrixmeds-api.git
-cd matrixmeds-api
-```
-
-2. Create and activate a virtual environment:
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
-
-3. Install dependencies:
+1. Install dependencies:
 ```bash
 pip install -r requirements.txt
+pip install -r requirements-dev.txt  # For CDK development
 ```
 
-4. Create a `.env` file with your configuration:
-```env
-AWS_REGION=us-east-1
-DYNAMODB_TABLE=matrixmeds-interactions
-COGNITO_USER_POOL_ID=your-user-pool-id
-COGNITO_CLIENT_ID=your-client-id
-ENVIRONMENT=development
-```
-
-5. Run the application:
+2. Configure AWS credentials:
 ```bash
-uvicorn app.main:app --reload
-```
-
-## API Endpoints
-
-- `POST /api/v1/interactions/check`: Check for interactions between medications
-- `POST /api/v1/interactions`: Create a new interaction record
-
-## Development
-
-### Running Tests
-```bash
-pytest
-```
-
-### Seeding Data
-```bash
-python scripts/seed_data.py
-```
-
-### Docker Build
-```bash
-docker build -t matrixmeds-api .
+aws configure
 ```
 
 ## Deployment
 
-The application is configured to deploy to AWS ECS using Jenkins. The pipeline includes:
-- Running tests
-- Building Docker image
-- Pushing to ECR
-- Deploying to ECS
+1. Bootstrap your AWS environment (first time only):
+```bash
+cdk bootstrap
+```
+
+2. Deploy the infrastructure:
+```bash
+cdk deploy --all
+```
+
+3. Build and push the Docker image:
+```bash
+# Get the ECR repository URI from CDK outputs
+export ECR_REPO=$(aws cloudformation describe-stacks --stack-name MatrixMedsStack --query 'Stacks[0].Outputs[?OutputKey==`RepositoryURI`].OutputValue' --output text)
+
+# Build the image
+docker build -t matrixmeds-api .
+
+# Login to ECR
+aws ecr get-login-password --region $(aws configure get region) | docker login --username AWS --password-stdin $ECR_REPO
+
+# Tag and push the image
+docker tag matrixmeds-api:latest $ECR_REPO:latest
+docker push $ECR_REPO:latest
+```
+
+4. Update the ECS service (if needed):
+```bash
+aws ecs update-service --cluster matrixmeds-cluster --service MatrixMedsService --force-new-deployment
+```
+
+## Infrastructure Details
+
+The CDK stack creates:
+- DynamoDB table for medication interactions
+- Cognito User Pool for authentication
+- ECR repository for Docker images
+- ECS Fargate service with:
+  - Application Load Balancer
+  - Auto-scaling
+  - Fargate Spot for cost optimization
+  - CloudWatch monitoring
+
+## API Endpoints
+
+- `POST /api/v1/interactions/check` - Check medication interactions
+- `GET /health` - Health check endpoint
+
+## Development
+
+1. Run locally:
+```bash
+uvicorn app.main:app --reload
+```
+
+2. Run tests:
+```bash
+pytest
+```
+
+## Cleanup
+
+To destroy all resources:
+```bash
+cdk destroy --all
+```
 
 ## License
 
