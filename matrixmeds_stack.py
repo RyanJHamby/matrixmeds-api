@@ -108,7 +108,13 @@ class MatrixMedsStack(Stack):
             desired_count=1,
             cpu=256,
             memory_limit_mib=512,
-            public_load_balancer=True
+            public_load_balancer=True,
+            capacity_provider_strategies=[
+                ecs.CapacityProviderStrategy(
+                    capacity_provider="FARGATE_SPOT",
+                    weight=1
+                )
+            ]
         )
 
         # Add health check path
