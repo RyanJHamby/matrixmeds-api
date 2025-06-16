@@ -6,36 +6,47 @@ from app.config import settings
 
 security = HTTPBearer()
 
+# Create the Cognito client at module level
+cognito_client = boto3.client('cognito-idp', region_name=settings.AWS_REGION)
+
 class CognitoAuth:
     def __init__(self):
-        self.client = boto3.client('cognito-idp', region_name=settings.AWS_REGION)
+        self.client = cognito_client
         self.user_pool_id = settings.COGNITO_USER_POOL_ID
         self.client_id = settings.COGNITO_CLIENT_ID
 
-    async def validate_token(self, credentials: HTTPAuthorizationCredentials = Security(security)):
-        try:
-            token = credentials.credentials
-            # Get the public keys from Cognito
-            keys = self.client.get_signing_key(self.user_pool_id)
-            
-            # Decode and verify the token
-            payload = jwt.decode(
-                token,
-                keys,
-                algorithms=['RS256'],
-                audience=self.client_id
-            )
-            
-            return payload
-        except JWTError:
+    async def validate_token(self, token: str = None) -> dict:
+        if not token:
             raise HTTPException(
                 status_code=401,
-                detail="Invalid authentication credentials"
+                detail="Not authenticated"
+            )
+            
+        try:
+            # Get user info from Cognito
+            response = self.client.get_user(AccessToken=token)
+            
+            # Extract user attributes
+            user_attrs = {
+                attr["Name"]: attr["Value"]
+                for attr in response["UserAttributes"]
+            }
+            
+            return user_attrs
+            
+        except self.client.exceptions.NotAuthorizedException:
+            raise HTTPException(
+                status_code=401,
+                detail="Invalid token"
             )
         except Exception as e:
             raise HTTPException(
                 status_code=401,
-                detail=str(e)
+                detail="Authentication failed"
             )
 
-auth = CognitoAuth() 
+    async def get_current_user(self, credentials: HTTPAuthorizationCredentials = Security(security)) -> dict:
+        return await self.validate_token(credentials.credentials)
+
+auth = CognitoAuth()
+validate_token = auth.validate_token 

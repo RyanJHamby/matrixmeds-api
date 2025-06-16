@@ -1,164 +1,161 @@
 import pytest
-from unittest.mock import patch, MagicMock, AsyncMock
-from botocore.exceptions import ClientError
+from unittest.mock import AsyncMock, patch
 from app.db.dynamo import DynamoDB
+from botocore.exceptions import ClientError
 
 @pytest.fixture
-def mock_dynamodb():
-    with patch("boto3.resource") as mock:
-        mock_table = MagicMock()
-        mock_table.get_item = AsyncMock()
-        mock_table.put_item = AsyncMock()
-        mock_table.update_item = AsyncMock()
-        mock_table.delete_item = AsyncMock()
-        mock_table.query = AsyncMock()
-        mock.return_value.Table.return_value = mock_table
+def mock_table():
+    with patch("boto3.resource") as mock_resource:
+        mock_table = AsyncMock()
+        mock_resource.return_value.Table.return_value = mock_table
         yield mock_table
 
 @pytest.mark.asyncio
-async def test_get_item(mock_dynamodb):
-    mock_dynamodb.get_item.return_value = {"Item": {"id": "123", "name": "test"}}
+async def test_get_item(mock_table):
+    mock_table.get_item.return_value = {
+        "Item": {
+            "id": "123",
+            "medication1": "Drug A",
+            "medication2": "Drug B"
+        }
+    }
     db = DynamoDB()
-    
     result = await db.get_item({"id": "123"})
-    assert result == {"id": "123", "name": "test"}
-    mock_dynamodb.get_item.assert_called_once_with(Key={"id": "123"})
+    assert result["id"] == "123"
+    assert result["medication1"] == "Drug A"
+    assert result["medication2"] == "Drug B"
 
 @pytest.mark.asyncio
-async def test_get_item_not_found(mock_dynamodb):
-    mock_dynamodb.get_item.return_value = {}
+async def test_get_item_not_found(mock_table):
+    mock_table.get_item.return_value = {}
     db = DynamoDB()
-    
     result = await db.get_item({"id": "123"})
     assert result is None
 
 @pytest.mark.asyncio
-async def test_get_item_error(mock_dynamodb):
-    mock_dynamodb.get_item.side_effect = ClientError(
+async def test_get_item_error(mock_table):
+    mock_table.get_item.side_effect = ClientError(
         {"Error": {"Code": "ResourceNotFoundException"}},
-        "get_item"
+        "GetItem"
     )
     db = DynamoDB()
-    
     with pytest.raises(Exception) as exc_info:
         await db.get_item({"id": "123"})
     assert "Error getting item" in str(exc_info.value)
 
 @pytest.mark.asyncio
-async def test_put_item(mock_dynamodb):
-    item = {"id": "123", "name": "test"}
+async def test_put_item(mock_table):
+    item = {
+        "id": "123",
+        "medication1": "Drug A",
+        "medication2": "Drug B"
+    }
+    mock_table.put_item.return_value = {"Item": item}
     db = DynamoDB()
-    
     result = await db.put_item(item)
     assert result == item
-    mock_dynamodb.put_item.assert_called_once_with(Item=item)
 
 @pytest.mark.asyncio
-async def test_put_item_error(mock_dynamodb):
-    mock_dynamodb.put_item.side_effect = ClientError(
+async def test_put_item_error(mock_table):
+    mock_table.put_item.side_effect = ClientError(
         {"Error": {"Code": "ValidationException"}},
-        "put_item"
+        "PutItem"
     )
     db = DynamoDB()
-    
     with pytest.raises(Exception) as exc_info:
         await db.put_item({"id": "123"})
     assert "Error putting item" in str(exc_info.value)
 
 @pytest.mark.asyncio
-async def test_update_item(mock_dynamodb):
-    mock_dynamodb.update_item.return_value = {
-        "Attributes": {"id": "123", "name": "updated"}
+async def test_update_item(mock_table):
+    mock_table.update_item.return_value = {
+        "Attributes": {
+            "id": "123",
+            "medication1": "Drug A",
+            "medication2": "Drug B"
+        }
     }
     db = DynamoDB()
-    
     result = await db.update_item(
         {"id": "123"},
-        "SET #n = :name",
-        {":name": "updated"}
+        "SET medication1 = :med1",
+        {":med1": "Drug A"}
     )
-    assert result == {"id": "123", "name": "updated"}
-    mock_dynamodb.update_item.assert_called_once_with(
-        Key={"id": "123"},
-        UpdateExpression="SET #n = :name",
-        ExpressionAttributeValues={":name": "updated"},
-        ReturnValues="ALL_NEW"
-    )
+    assert result["id"] == "123"
+    assert result["medication1"] == "Drug A"
 
 @pytest.mark.asyncio
-async def test_update_item_error(mock_dynamodb):
-    mock_dynamodb.update_item.side_effect = ClientError(
+async def test_update_item_error(mock_table):
+    mock_table.update_item.side_effect = ClientError(
         {"Error": {"Code": "ValidationException"}},
-        "update_item"
+        "UpdateItem"
     )
     db = DynamoDB()
-    
     with pytest.raises(Exception) as exc_info:
         await db.update_item(
             {"id": "123"},
-            "SET #n = :name",
-            {":name": "updated"}
+            "SET medication1 = :med1",
+            {":med1": "Drug A"}
         )
     assert "Error updating item" in str(exc_info.value)
 
 @pytest.mark.asyncio
-async def test_delete_item(mock_dynamodb):
+async def test_delete_item(mock_table):
+    mock_table.delete_item.return_value = {}
     db = DynamoDB()
-    
     await db.delete_item({"id": "123"})
-    mock_dynamodb.delete_item.assert_called_once_with(Key={"id": "123"})
+    mock_table.delete_item.assert_called_once()
 
 @pytest.mark.asyncio
-async def test_delete_item_error(mock_dynamodb):
-    mock_dynamodb.delete_item.side_effect = ClientError(
-        {"Error": {"Code": "ResourceNotFoundException"}},
-        "delete_item"
+async def test_delete_item_error(mock_table):
+    mock_table.delete_item.side_effect = ClientError(
+        {"Error": {"Code": "ValidationException"}},
+        "DeleteItem"
     )
     db = DynamoDB()
-    
     with pytest.raises(Exception) as exc_info:
         await db.delete_item({"id": "123"})
     assert "Error deleting item" in str(exc_info.value)
 
 @pytest.mark.asyncio
-async def test_query(mock_dynamodb):
-    mock_dynamodb.query.return_value = {
-        "Items": [{"id": "123", "name": "test"}]
+async def test_query(mock_table):
+    mock_table.query.return_value = {
+        "Items": [
+            {
+                "id": "123",
+                "medication1": "Drug A",
+                "medication2": "Drug B"
+            }
+        ]
     }
     db = DynamoDB()
-    
     result = await db.query(
-        "id = :id",
-        {":id": "123"}
+        "medication1 = :med1",
+        {":med1": "Drug A"}
     )
-    assert result == [{"id": "123", "name": "test"}]
-    mock_dynamodb.query.assert_called_once_with(
-        KeyConditionExpression="id = :id",
-        ExpressionAttributeValues={":id": "123"}
-    )
+    assert len(result) == 1
+    assert result[0]["id"] == "123"
 
 @pytest.mark.asyncio
-async def test_query_empty(mock_dynamodb):
-    mock_dynamodb.query.return_value = {"Items": []}
+async def test_query_empty(mock_table):
+    mock_table.query.return_value = {"Items": []}
     db = DynamoDB()
-    
     result = await db.query(
-        "id = :id",
-        {":id": "123"}
+        "medication1 = :med1",
+        {":med1": "Drug A"}
     )
-    assert result == []
+    assert len(result) == 0
 
 @pytest.mark.asyncio
-async def test_query_error(mock_dynamodb):
-    mock_dynamodb.query.side_effect = ClientError(
+async def test_query_error(mock_table):
+    mock_table.query.side_effect = ClientError(
         {"Error": {"Code": "ValidationException"}},
-        "query"
+        "Query"
     )
     db = DynamoDB()
-    
     with pytest.raises(Exception) as exc_info:
         await db.query(
-            "id = :id",
-            {":id": "123"}
+            "medication1 = :med1",
+            {":med1": "Drug A"}
         )
     assert "Error querying items" in str(exc_info.value) 

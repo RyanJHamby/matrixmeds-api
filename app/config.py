@@ -13,6 +13,7 @@ class Settings(BaseSettings):
     # AWS Settings
     AWS_REGION: str = os.getenv("AWS_REGION", "us-east-1")
     DYNAMODB_TABLE: str = os.getenv("DYNAMODB_TABLE", "matrixmeds-interactions")
+    DYNAMODB_ENDPOINT: str = os.getenv("DYNAMODB_ENDPOINT", "http://localhost:8000")  # For local testing
     
     # Cognito Settings
     COGNITO_USER_POOL_ID: str = os.getenv("COGNITO_USER_POOL_ID", "")
@@ -30,5 +31,6 @@ class Settings(BaseSettings):
     
     class Config:
         case_sensitive = True
+        env_file = ".env"
 
 settings = Settings() 

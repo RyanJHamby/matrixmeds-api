@@ -6,7 +6,7 @@ from app.config import Settings
 def cleanup_env():
     # Store original env vars
     original_env = {}
-    for key in ["AWS_REGION", "DYNAMODB_TABLE", "ENVIRONMENT"]:
+    for key in ["AWS_REGION", "DYNAMODB_TABLE", "ENVIRONMENT", "DYNAMODB_ENDPOINT"]:
         if key in os.environ:
             original_env[key] = os.environ[key]
     
@@ -15,7 +15,7 @@ def cleanup_env():
     # Restore original env vars
     for key in original_env:
         os.environ[key] = original_env[key]
-    for key in ["AWS_REGION", "DYNAMODB_TABLE", "ENVIRONMENT"]:
+    for key in ["AWS_REGION", "DYNAMODB_TABLE", "ENVIRONMENT", "DYNAMODB_ENDPOINT"]:
         if key not in original_env:
             os.environ.pop(key, None)
 
@@ -26,6 +26,7 @@ def test_settings_default_values():
     assert settings.AWS_REGION == "us-east-1"
     assert settings.DYNAMODB_TABLE == "test-table"
     assert settings.ENVIRONMENT == "test"
+    assert settings.DYNAMODB_ENDPOINT == "http://localhost:8000"
 
 def test_cors_origins():
     settings = Settings()
@@ -37,8 +38,10 @@ def test_environment_variables():
     os.environ["AWS_REGION"] = "us-west-2"
     os.environ["DYNAMODB_TABLE"] = "test-table"
     os.environ["ENVIRONMENT"] = "production"
+    os.environ["DYNAMODB_ENDPOINT"] = "http://dynamodb.us-west-2.amazonaws.com"
     
     settings = Settings()
     assert settings.AWS_REGION == "us-west-2"
     assert settings.DYNAMODB_TABLE == "test-table"
-    assert settings.ENVIRONMENT == "production" 
+    assert settings.ENVIRONMENT == "production"
+    assert settings.DYNAMODB_ENDPOINT == "http://dynamodb.us-west-2.amazonaws.com" 
