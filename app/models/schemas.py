@@ -1,4 +1,4 @@
-from pydantic import BaseModel, ConfigDict, field_validator
+from pydantic import BaseModel, ConfigDict, field_validator, Field
 from typing import List, Optional
 from datetime import datetime, UTC
 
@@ -40,4 +40,32 @@ class InteractionCheckRequest(BaseModel):
 class InteractionCheckResponse(BaseModel):
     interactions: List[InteractionResponse]
 
-    model_config = ConfigDict(from_attributes=True) 
+    model_config = ConfigDict(from_attributes=True)
+
+class MedicationBase(BaseModel):
+    name: str = Field(..., min_length=1)
+    generic_name: str = Field(..., min_length=1)
+    description: str = Field(..., min_length=1)
+    dosage_forms: list[str] = Field(..., min_items=1)
+    active_ingredients: list[str] = Field(..., min_items=1)
+    warnings: list[str] = Field(default_factory=list)
+    side_effects: list[str] = Field(default_factory=list)
+    manufacturer: str = Field(..., min_length=1)
+    category: str = Field(..., min_length=1)
+
+class MedicationCreate(MedicationBase):
+    pass
+
+class MedicationResponse(MedicationBase):
+    id: str
+    created_at: str
+    updated_at: str
+
+    model_config = ConfigDict(from_attributes=True)
+
+class MedicationListResponse(BaseModel):
+    items: list[MedicationResponse]
+    total: int
+    page: int
+    limit: int
+    has_more: bool 

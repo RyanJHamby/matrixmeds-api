@@ -29,6 +29,9 @@ class Settings(BaseSettings):
     # Environment
     ENVIRONMENT: str = os.getenv("ENVIRONMENT", "development")
     
+    INTERACTIONS_TABLE: str = "interactions"
+    MEDICATIONS_TABLE: str = "medications"
+    
     class Config:
         case_sensitive = True
         env_file = ".env"
