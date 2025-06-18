@@ -55,15 +55,31 @@ class DynamoDB:
 
     async def query(
         self,
-        key_condition_expression: str,
-        expression_values: Dict
-    ) -> List[Dict]:
+        key_condition_expression: Optional[str] = None,
+        expression_values: Optional[Dict] = None,
+        filter_expression: Optional[str] = None,
+        expression_attribute_names: Optional[Dict] = None,
+        limit: Optional[int] = None,
+        select: Optional[str] = None
+    ) -> Dict:
         try:
-            response = await self.table.query(
-                KeyConditionExpression=key_condition_expression,
-                ExpressionAttributeValues=expression_values
-            )
-            return response.get("Items", [])
+            query_params = {}
+            
+            if key_condition_expression:
+                query_params["KeyConditionExpression"] = key_condition_expression
+            if expression_values:
+                query_params["ExpressionAttributeValues"] = expression_values
+            if filter_expression:
+                query_params["FilterExpression"] = filter_expression
+            if expression_attribute_names:
+                query_params["ExpressionAttributeNames"] = expression_attribute_names
+            if limit:
+                query_params["Limit"] = limit
+            if select:
+                query_params["Select"] = select
+                
+            response = await self.table.query(**query_params)
+            return response
         except ClientError as e:
             raise Exception(f"Error querying items: {str(e)}")
 

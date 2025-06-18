@@ -16,36 +16,28 @@ class MedicationService:
         limit: int = 50
     ) -> tuple[list[MedicationResponse], int, bool]:
         """List medications with search and pagination"""
-        # Calculate offset
         offset = (page - 1) * limit
-
-        # Build query
-        query_params = {
-            "TableName": self.table_name,
-            "Limit": limit + 1  # Get one extra to check if there are more
-        }
-
+        
+        # Build query parameters
+        query_kwargs = {}
         if search:
-            # Use GSI for search if available, otherwise filter results
-            query_params["FilterExpression"] = "contains(#name, :search) OR contains(#generic_name, :search)"
-            query_params["ExpressionAttributeNames"] = {
+            query_kwargs["filter_expression"] = "contains(#name, :search) OR contains(#generic_name, :search)"
+            query_kwargs["expression_attribute_names"] = {
                 "#name": "name",
                 "#generic_name": "generic_name"
             }
-            query_params["ExpressionAttributeValues"] = {
+            query_kwargs["expression_attribute_values"] = {
                 ":search": search.lower()
             }
-
-        # Execute query
-        response = await self.db.query(**query_params)
+        if limit is not None:
+            query_kwargs["limit"] = limit + 1
+            
+        response = await self.db.query(**query_kwargs)
         items = response.get("Items", [])
-
-        # Check if there are more results
         has_more = len(items) > limit
         if has_more:
-            items = items[:-1]  # Remove the extra item
-
-        # Convert to response models
+            items = items[:-1]
+            
         medications = [
             MedicationResponse(
                 id=item["id"],
@@ -63,54 +55,39 @@ class MedicationService:
             )
             for item in items
         ]
-
-        # Get total count if needed
         total = await self._get_total_count(search) if page == 1 else None
-
         return medications, total, has_more
 
     async def get_medication(self, medication_id: str) -> Optional[MedicationResponse]:
-        """Get medication by ID"""
-        response = await self.db.get_item(
-            TableName=self.table_name,
-            Key={"id": medication_id}
-        )
-
-        item = response.get("Item")
-        if not item:
+        response = await self.db.get_item({"id": medication_id})
+        if not response:
             return None
-
+            
         return MedicationResponse(
-            id=item["id"],
-            name=item["name"],
-            generic_name=item["generic_name"],
-            description=item["description"],
-            dosage_forms=item["dosage_forms"],
-            active_ingredients=item["active_ingredients"],
-            warnings=item.get("warnings", []),
-            side_effects=item.get("side_effects", []),
-            manufacturer=item["manufacturer"],
-            category=item["category"],
-            created_at=item["created_at"],
-            updated_at=item["updated_at"]
+            id=response["id"],
+            name=response["name"],
+            generic_name=response["generic_name"],
+            description=response["description"],
+            dosage_forms=response["dosage_forms"],
+            active_ingredients=response["active_ingredients"],
+            warnings=response.get("warnings", []),
+            side_effects=response.get("side_effects", []),
+            manufacturer=response["manufacturer"],
+            category=response["category"],
+            created_at=response["created_at"],
+            updated_at=response["updated_at"]
         )
 
     async def _get_total_count(self, search: Optional[str] = None) -> int:
-        """Get total count of medications"""
-        query_params = {
-            "TableName": self.table_name,
-            "Select": "COUNT"
-        }
-
+        query_kwargs = {"select": "COUNT"}
         if search:
-            query_params["FilterExpression"] = "contains(#name, :search) OR contains(#generic_name, :search)"
-            query_params["ExpressionAttributeNames"] = {
+            query_kwargs["filter_expression"] = "contains(#name, :search) OR contains(#generic_name, :search)"
+            query_kwargs["expression_attribute_names"] = {
                 "#name": "name",
                 "#generic_name": "generic_name"
             }
-            query_params["ExpressionAttributeValues"] = {
+            query_kwargs["expression_attribute_values"] = {
                 ":search": search.lower()
             }
-
-        response = await self.db.query(**query_params)
+        response = await self.db.query(**query_kwargs)
         return response.get("Count", 0) 

@@ -10,6 +10,7 @@ from app.models.schemas import (
 from app.services.interactions import interaction_service
 from app.auth.cognito import auth
 from app.services.medications import MedicationService
+from app.api.v1.dependencies import get_medication_service
 
 router = APIRouter()
 

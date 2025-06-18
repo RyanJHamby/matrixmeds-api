@@ -44,4 +44,14 @@ def test_environment_variables():
     assert settings.AWS_REGION == "us-west-2"
     assert settings.DYNAMODB_TABLE == "test-table"
     assert settings.ENVIRONMENT == "production"
-    assert settings.DYNAMODB_ENDPOINT == "http://dynamodb.us-west-2.amazonaws.com" 
+    assert settings.DYNAMODB_ENDPOINT == "http://dynamodb.us-west-2.amazonaws.com"
+
+def test_medications_table_default():
+    """Test medications table default value"""
+    settings = Settings()
+    assert settings.MEDICATIONS_TABLE == "medications"
+
+def test_interactions_table_default():
+    """Test interactions table default value"""
+    settings = Settings()
+    assert settings.INTERACTIONS_TABLE == "interactions" 

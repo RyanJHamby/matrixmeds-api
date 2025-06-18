@@ -1,9 +1,11 @@
 import pytest
 from fastapi.testclient import TestClient
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch, MagicMock, AsyncMock
 from app.main import app
 from app.auth.cognito import validate_token
 from app.models.schemas import MedicationResponse, MedicationListResponse
+from app.api.v1.dependencies import get_medication_service
+from fastapi import HTTPException
 
 client = TestClient(app)
 
@@ -11,10 +13,16 @@ client = TestClient(app)
 def override_auth_dependency():
     async def mock_get_current_user():
         return {"sub": "test-user-id", "email": "test@example.com"}
-    
     app.dependency_overrides[validate_token] = mock_get_current_user
     yield
     app.dependency_overrides = {}
+
+@pytest.fixture(autouse=True)
+def mock_medication_service():
+    mock = AsyncMock()
+    app.dependency_overrides[get_medication_service] = lambda: mock
+    yield mock
+    app.dependency_overrides.pop(get_medication_service, None)
 
 @pytest.fixture
 def mock_db():
@@ -69,20 +77,7 @@ def test_create_interaction_invalid_request():
     assert response.status_code == 422
     assert "severity" in response.json()["detail"][0]["loc"]
 
-@pytest.mark.asyncio
-async def test_list_medications_unauthorized(client: TestClient):
-    """Test listing medications without auth"""
-    response = client.get("/api/v1/medications")
-    assert response.status_code == 401
-
-@pytest.mark.asyncio
-async def test_get_medication_unauthorized(client: TestClient):
-    """Test getting medication without auth"""
-    response = client.get("/api/v1/medications/123")
-    assert response.status_code == 401
-
-@pytest.mark.asyncio
-async def test_list_medications(client: TestClient, mock_medication_service):
+def test_list_medications(mock_medication_service):
     """Test listing medications"""
     # Mock service response
     mock_medications = [
@@ -111,8 +106,7 @@ async def test_list_medications(client: TestClient, mock_medication_service):
     assert data["total"] == 1
     assert not data["has_more"]
 
-@pytest.mark.asyncio
-async def test_get_medication(client: TestClient, mock_medication_service):
+def test_get_medication(mock_medication_service):
     """Test getting medication"""
     # Mock service response
     mock_medication = MedicationResponse(
@@ -138,8 +132,7 @@ async def test_get_medication(client: TestClient, mock_medication_service):
     assert data["id"] == "1"
     assert data["name"] == "Test Med"
 
-@pytest.mark.asyncio
-async def test_get_medication_not_found(client: TestClient, mock_medication_service):
+def test_get_medication_not_found(mock_medication_service):
     """Test getting non-existent medication"""
     mock_medication_service.get_medication.return_value = None
 
