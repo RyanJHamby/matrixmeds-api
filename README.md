@@ -85,8 +85,10 @@ The CDK stack creates:
 
 1. Run locally:
 ```bash
-uvicorn app.main:app --reload
+uvicorn app.main:app --reload --port 8000
 ```
+
+This will start the API at http://localhost:8000
 
 2. Run tests:
 ```bash

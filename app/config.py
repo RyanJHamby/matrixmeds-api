@@ -20,11 +20,8 @@ class Settings(BaseSettings):
     COGNITO_CLIENT_ID: str = os.getenv("COGNITO_CLIENT_ID", "")
     
     # CORS Settings
-    CORS_ORIGINS: List[str] = [
-        "http://localhost:3000",
-        "http://localhost:8000",
-        "https://matrixmeds.com"
-    ]
+    # For local development, allow all origins. For production, restrict this list.
+    CORS_ORIGINS: List[str] = ["*"]
     
     # Environment
     ENVIRONMENT: str = os.getenv("ENVIRONMENT", "development")
