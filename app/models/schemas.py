@@ -39,6 +39,7 @@ class InteractionCheckRequest(BaseModel):
 
 class InteractionCheckResponse(BaseModel):
     interactions: List[InteractionResponse]
+    has_interactions: bool
 
     model_config = ConfigDict(from_attributes=True)
 
