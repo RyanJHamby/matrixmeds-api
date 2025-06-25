@@ -2,11 +2,13 @@ import pytest
 from fastapi.testclient import TestClient
 from unittest.mock import patch, MagicMock, AsyncMock
 from app.main import app
-from app.auth.cognito import validate_token
+from app.auth.cognito import auth
 from app.models.schemas import (
     MedicationResponse, 
     MedicationListResponse,
+    InteractionCreate,
     InteractionResponse,
+    InteractionCheckRequest,
     InteractionCheckResponse
 )
 from app.api.v1.dependencies import get_medication_service
@@ -15,13 +17,15 @@ from fastapi import HTTPException
 
 client = TestClient(app)
 
+# Mock the authentication dependency
+async def mock_get_current_user():
+    return {"sub": "test-user-id", "email": "test@example.com"}
+
 @pytest.fixture(autouse=True)
-def override_auth_dependency():
-    async def mock_get_current_user():
-        return {"sub": "test-user-id", "email": "test@example.com"}
-    app.dependency_overrides[validate_token] = mock_get_current_user
+def setup_auth_mock():
+    app.dependency_overrides[auth.get_current_user] = mock_get_current_user
     yield
-    app.dependency_overrides = {}
+    app.dependency_overrides.clear()
 
 @pytest.fixture(autouse=True)
 def mock_medication_service():

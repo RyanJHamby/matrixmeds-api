@@ -11,14 +11,30 @@ from app.services.interactions import interaction_service
 from app.auth.cognito import auth
 from app.services.medications import MedicationService
 from app.api.v1.dependencies import get_medication_service
+from app.config import settings
 
 router = APIRouter()
+
+# Optional authentication for development
+async def get_optional_user(_: dict = Depends(auth.get_current_user)):
+    return _
 
 @router.post("/interactions/check", response_model=InteractionCheckResponse)
 async def check_interactions(
     request: InteractionCheckRequest,
-    _: dict = Depends(auth.validate_token)
+    _: dict = Depends(auth.get_current_user)
 ):
+    interactions = await interaction_service.check_interactions(request.medications)
+    return InteractionCheckResponse(
+        interactions=interactions,
+        has_interactions=len(interactions) > 0
+    )
+
+@router.post("/interactions/check/dev", response_model=InteractionCheckResponse)
+async def check_interactions_dev(
+    request: InteractionCheckRequest
+):
+    """Development endpoint without authentication"""
     interactions = await interaction_service.check_interactions(request.medications)
     return InteractionCheckResponse(
         interactions=interactions,
@@ -28,7 +44,7 @@ async def check_interactions(
 @router.post("/interactions", response_model=InteractionResponse)
 async def create_interaction(
     interaction: InteractionCreate,
-    _: dict = Depends(auth.validate_token)
+    _: dict = Depends(auth.get_current_user)
 ):
     return await interaction_service.create_interaction(interaction)
 
