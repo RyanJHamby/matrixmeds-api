@@ -14,10 +14,10 @@ class InteractionService:
                     "medication1 = :med1 AND medication2 = :med2",
                     {":med1": med1, ":med2": med2}
                 )
-                if result:
+                if result and "Items" in result:
                     interactions.extend([
                         InteractionResponse(**item)
-                        for item in result
+                        for item in result["Items"]
                     ])
         return interactions
 

@@ -21,19 +21,14 @@ class CognitoAuth:
                 status_code=401,
                 detail="Not authenticated"
             )
-            
         try:
-            # Get user info from Cognito
             response = self.client.get_user(AccessToken=token)
-            
-            # Extract user attributes
             user_attrs = {
                 attr["Name"]: attr["Value"]
                 for attr in response["UserAttributes"]
+                if "Name" in attr and "Value" in attr
             }
-            
             return user_attrs
-            
         except self.client.exceptions.NotAuthorizedException:
             raise HTTPException(
                 status_code=401,
@@ -46,6 +41,8 @@ class CognitoAuth:
             )
 
     async def get_current_user(self, credentials: HTTPAuthorizationCredentials = Security(security)) -> dict:
+        if credentials is None:
+            raise HTTPException(status_code=401, detail="Not authenticated")
         return await self.validate_token(credentials.credentials)
 
 auth = CognitoAuth()

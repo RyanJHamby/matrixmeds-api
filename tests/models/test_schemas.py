@@ -114,13 +114,15 @@ def test_interaction_check_response():
                 "created_at": now,
                 "updated_at": now
             }
-        ]
+        ],
+        "has_interactions": True
     }
     response = InteractionCheckResponse(**data)
     assert len(response.interactions) == 1
     assert response.interactions[0].medication1 == "Drug A"
     assert response.interactions[0].medication2 == "Drug B"
     assert response.interactions[0].severity == "high"
+    assert response.has_interactions is True
 
 def test_medication_base_validation():
     """Test MedicationBase validation"""

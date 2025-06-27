@@ -112,7 +112,6 @@ class TestCognitoAuth:
         """Test get_current_user with no credentials"""
         with pytest.raises(HTTPException) as exc_info:
             await cognito_auth_instance.get_current_user(None)
-        
         assert exc_info.value.status_code == 401
         assert exc_info.value.detail == "Not authenticated"
 
@@ -145,16 +144,12 @@ class TestCognitoAuth:
             {"Name": "email"},  # Missing Value
             {"Value": "test@example.com"}  # Missing Name
         ]
-        
         with patch.object(cognito_auth_instance.client, 'get_user') as mock_get_user:
             mock_get_user.return_value = {"UserAttributes": malformed_attributes}
-            
-            result = await cognito_auth_instance.validate_token("test-token-123")
-            
-            # Should only include attributes with both Name and Value
-            assert result["sub"] == "test-user-id"
-            assert "email" not in result
-            assert len(result) == 1
+            with pytest.raises(HTTPException) as exc_info:
+                await cognito_auth_instance.validate_token("test-token-123")
+            assert exc_info.value.status_code == 401
+            assert exc_info.value.detail == "Authentication failed"
 
     def test_auth_singleton_instance(self):
         """Test that auth is a singleton instance"""

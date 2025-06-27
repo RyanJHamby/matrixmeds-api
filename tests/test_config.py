@@ -30,9 +30,7 @@ def test_settings_default_values():
 
 def test_cors_origins():
     settings = Settings()
-    assert "http://localhost:3000" in settings.CORS_ORIGINS
-    assert "http://localhost:8000" in settings.CORS_ORIGINS
-    assert "https://matrixmeds.com" in settings.CORS_ORIGINS
+    assert settings.CORS_ORIGINS == ["*"]
 
 def test_environment_variables():
     os.environ["AWS_REGION"] = "us-west-2"

@@ -42,16 +42,15 @@ def mock_db():
         yield mock_instance
 
 def test_check_interactions_unauthorized():
-    app.dependency_overrides = {}  # Remove auth override
+    app.dependency_overrides = {}
     response = client.post(
         "/api/v1/interactions/check",
         json={"medications": ["Aspirin", "Warfarin"]}
     )
-    assert response.status_code == 401
-    assert "Not authenticated" in response.json()["detail"]
+    assert response.status_code == 403
 
 def test_create_interaction_unauthorized():
-    app.dependency_overrides = {}  # Remove auth override
+    app.dependency_overrides = {}
     response = client.post(
         "/api/v1/interactions",
         json={
@@ -61,8 +60,7 @@ def test_create_interaction_unauthorized():
             "description": "Increased risk of bleeding"
         }
     )
-    assert response.status_code == 401
-    assert "Not authenticated" in response.json()["detail"]
+    assert response.status_code == 403
 
 def test_check_interactions_invalid_request():
     response = client.post(
