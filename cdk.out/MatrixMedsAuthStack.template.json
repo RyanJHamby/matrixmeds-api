@@ -139,14 +139,6 @@
   "UserPoolDomain": {
    "Description": "Cognito User Pool Domain",
    "Value": "matrixmeds.auth.us-east-1.amazoncognito.com"
-  },
-  "ExportsOutputRefMatrixMedsUserPool096B6D22859AAFC8": {
-   "Value": {
-    "Ref": "MatrixMedsUserPool096B6D22"
-   },
-   "Export": {
-    "Name": "MatrixMedsAuthStack:ExportsOutputRefMatrixMedsUserPool096B6D22859AAFC8"
-   }
   }
  },
  "Parameters": {

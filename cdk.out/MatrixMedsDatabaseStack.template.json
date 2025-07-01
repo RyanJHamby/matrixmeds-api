@@ -81,17 +81,6 @@
      "Arn"
     ]
    }
-  },
-  "ExportsOutputFnGetAttMatrixMedsTableABB6C829Arn8928D82E": {
-   "Value": {
-    "Fn::GetAtt": [
-     "MatrixMedsTableABB6C829",
-     "Arn"
-    ]
-   },
-   "Export": {
-    "Name": "MatrixMedsDatabaseStack:ExportsOutputFnGetAttMatrixMedsTableABB6C829Arn8928D82E"
-   }
   }
  },
  "Parameters": {

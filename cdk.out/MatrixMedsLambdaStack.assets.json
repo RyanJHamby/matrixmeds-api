@@ -1,16 +1,16 @@
 {
   "version": "44.0.0",
   "files": {
-    "4bdcf602e511473b0c8f0db5ba1a2e2bd81aaa0b08977c7d11604e3d22227bfa": {
-      "displayName": "MatrixMedsDatabaseStack Template",
+    "16ec07f801cd7d28d3ddcd25b9c3add667b0b36dbe68b9e9fd08864774992dbe": {
+      "displayName": "MatrixMedsLambdaStack Template",
       "source": {
-        "path": "MatrixMedsDatabaseStack.template.json",
+        "path": "MatrixMedsLambdaStack.template.json",
         "packaging": "file"
       },
       "destinations": {
         "476219038852-us-east-1": {
           "bucketName": "cdk-hnb659fds-assets-476219038852-us-east-1",
-          "objectKey": "4bdcf602e511473b0c8f0db5ba1a2e2bd81aaa0b08977c7d11604e3d22227bfa.json",
+          "objectKey": "16ec07f801cd7d28d3ddcd25b9c3add667b0b36dbe68b9e9fd08864774992dbe.json",
           "region": "us-east-1",
           "assumeRoleArn": "arn:${AWS::Partition}:iam::476219038852:role/cdk-hnb659fds-file-publishing-role-476219038852-us-east-1"
         }

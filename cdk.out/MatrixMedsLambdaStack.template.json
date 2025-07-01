@@ -1,0 +1,219 @@
+{
+ "Resources": {
+  "MatrixMedsLambdaServiceRoleFA05094F": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "MatrixMedsLambdaStack/MatrixMedsLambda/ServiceRole/Resource"
+   }
+  },
+  "MatrixMedsLambdaB06A5FAE": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "ImageUri": {
+      "Fn::Join": [
+       "",
+       [
+        "476219038852.dkr.ecr.us-east-1.",
+        {
+         "Ref": "AWS::URLSuffix"
+        },
+        "/matrixmeds-api:latest"
+       ]
+      ]
+     }
+    },
+    "MemorySize": 512,
+    "PackageType": "Image",
+    "Role": {
+     "Fn::GetAtt": [
+      "MatrixMedsLambdaServiceRoleFA05094F",
+      "Arn"
+     ]
+    },
+    "Timeout": 10
+   },
+   "DependsOn": [
+    "MatrixMedsLambdaServiceRoleFA05094F"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "MatrixMedsLambdaStack/MatrixMedsLambda/Resource"
+   }
+  },
+  "MatrixMedsHttpApiFAE9B35D": {
+   "Type": "AWS::ApiGatewayV2::Api",
+   "Properties": {
+    "Name": "MatrixMedsHttpApi",
+    "ProtocolType": "HTTP"
+   },
+   "Metadata": {
+    "aws:cdk:path": "MatrixMedsLambdaStack/MatrixMedsHttpApi/Resource"
+   }
+  },
+  "MatrixMedsHttpApiDefaultRouteLambdaIntegrationBD93D5B4": {
+   "Type": "AWS::ApiGatewayV2::Integration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "MatrixMedsHttpApiFAE9B35D"
+    },
+    "IntegrationType": "AWS_PROXY",
+    "IntegrationUri": {
+     "Fn::GetAtt": [
+      "MatrixMedsLambdaB06A5FAE",
+      "Arn"
+     ]
+    },
+    "PayloadFormatVersion": "2.0"
+   },
+   "Metadata": {
+    "aws:cdk:path": "MatrixMedsLambdaStack/MatrixMedsHttpApi/DefaultRoute/LambdaIntegration/Resource"
+   }
+  },
+  "MatrixMedsHttpApiDefaultRouteLambdaIntegrationPermission8FCB0577": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "MatrixMedsLambdaB06A5FAE",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:us-east-1:476219038852:",
+       {
+        "Ref": "MatrixMedsHttpApiFAE9B35D"
+       },
+       "/*/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "MatrixMedsLambdaStack/MatrixMedsHttpApi/DefaultRoute/LambdaIntegration-Permission"
+   }
+  },
+  "MatrixMedsHttpApiDefaultRoute801EBFAB": {
+   "Type": "AWS::ApiGatewayV2::Route",
+   "Properties": {
+    "ApiId": {
+     "Ref": "MatrixMedsHttpApiFAE9B35D"
+    },
+    "AuthorizationType": "NONE",
+    "RouteKey": "$default",
+    "Target": {
+     "Fn::Join": [
+      "",
+      [
+       "integrations/",
+       {
+        "Ref": "MatrixMedsHttpApiDefaultRouteLambdaIntegrationBD93D5B4"
+       }
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "MatrixMedsLambdaStack/MatrixMedsHttpApi/DefaultRoute/Resource"
+   }
+  },
+  "MatrixMedsHttpApiDefaultStageAB87FE1D": {
+   "Type": "AWS::ApiGatewayV2::Stage",
+   "Properties": {
+    "ApiId": {
+     "Ref": "MatrixMedsHttpApiFAE9B35D"
+    },
+    "AutoDeploy": true,
+    "StageName": "$default"
+   },
+   "Metadata": {
+    "aws:cdk:path": "MatrixMedsLambdaStack/MatrixMedsHttpApi/DefaultStage/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/11O207DMAz9lr2n3ihfMECIPTGFD5i8zBTT5qLEYaqi/DtNJwRCsnRu1rF76Hc97DZ4TZ25jN3EZyhvgmZUi3UqZCJoCj6x+Dg/YCI1oT1fEMqTNyPFg8WBnrMzwt6px3f3lx8pWk5pUVUxWijaT9SChlVh4AGFrjh/9VBeRMI+cIsbNKl9FlrZwQkNEX+K/8nfveX1Yb2wklqVpuRzNKv3miVkqeo4y4d323u4W2bzmZi7mJ2wJdA3/AYoj/TwFwEAAA=="
+   },
+   "Metadata": {
+    "aws:cdk:path": "MatrixMedsLambdaStack/CDKMetadata/Default"
+   }
+  }
+ },
+ "Outputs": {
+  "ApiUrl": {
+   "Value": {
+    "Fn::GetAtt": [
+     "MatrixMedsHttpApiFAE9B35D",
+     "ApiEndpoint"
+    ]
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}
