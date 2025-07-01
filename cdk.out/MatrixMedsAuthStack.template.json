@@ -1,0 +1,186 @@
+{
+ "Resources": {
+  "MatrixMedsUserPool096B6D22": {
+   "Type": "AWS::Cognito::UserPool",
+   "Properties": {
+    "AccountRecoverySetting": {
+     "RecoveryMechanisms": [
+      {
+       "Name": "verified_email",
+       "Priority": 1
+      }
+     ]
+    },
+    "AdminCreateUserConfig": {
+     "AllowAdminCreateUserOnly": false
+    },
+    "AutoVerifiedAttributes": [
+     "email"
+    ],
+    "EmailVerificationMessage": "The verification code to your new account is {####}",
+    "EmailVerificationSubject": "Verify your new account",
+    "MfaConfiguration": "OFF",
+    "Policies": {
+     "PasswordPolicy": {
+      "MinimumLength": 8,
+      "RequireLowercase": true,
+      "RequireNumbers": true,
+      "RequireSymbols": true,
+      "RequireUppercase": true
+     }
+    },
+    "Schema": [
+     {
+      "Mutable": true,
+      "Name": "email",
+      "Required": true
+     }
+    ],
+    "SmsVerificationMessage": "The verification code to your new account is {####}",
+    "UserPoolName": "matrixmeds-users",
+    "UsernameAttributes": [
+     "email"
+    ],
+    "VerificationMessageTemplate": {
+     "DefaultEmailOption": "CONFIRM_WITH_CODE",
+     "EmailMessage": "The verification code to your new account is {####}",
+     "EmailSubject": "Verify your new account",
+     "SmsMessage": "The verification code to your new account is {####}"
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "MatrixMedsAuthStack/MatrixMedsUserPool/Resource"
+   }
+  },
+  "MatrixMedsUserPoolMatrixMedsClient44A88510": {
+   "Type": "AWS::Cognito::UserPoolClient",
+   "Properties": {
+    "AccessTokenValidity": 1440,
+    "AllowedOAuthFlows": [
+     "code"
+    ],
+    "AllowedOAuthFlowsUserPoolClient": true,
+    "AllowedOAuthScopes": [
+     "profile",
+     "phone",
+     "email",
+     "openid",
+     "aws.cognito.signin.user.admin"
+    ],
+    "CallbackURLs": [
+     "https://matrixmeds.com/callback"
+    ],
+    "ClientName": "matrixmeds-client",
+    "ExplicitAuthFlows": [
+     "ALLOW_CUSTOM_AUTH",
+     "ALLOW_USER_SRP_AUTH",
+     "ALLOW_REFRESH_TOKEN_AUTH"
+    ],
+    "GenerateSecret": false,
+    "IdTokenValidity": 1440,
+    "LogoutURLs": [
+     "https://matrixmeds.com/logout"
+    ],
+    "PreventUserExistenceErrors": "ENABLED",
+    "RefreshTokenValidity": 43200,
+    "SupportedIdentityProviders": [
+     "COGNITO"
+    ],
+    "TokenValidityUnits": {
+     "AccessToken": "minutes",
+     "IdToken": "minutes",
+     "RefreshToken": "minutes"
+    },
+    "UserPoolId": {
+     "Ref": "MatrixMedsUserPool096B6D22"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "MatrixMedsAuthStack/MatrixMedsUserPool/MatrixMedsClient/Resource"
+   }
+  },
+  "MatrixMedsUserPoolMatrixMedsDomainA6899774": {
+   "Type": "AWS::Cognito::UserPoolDomain",
+   "Properties": {
+    "Domain": "matrixmeds",
+    "UserPoolId": {
+     "Ref": "MatrixMedsUserPool096B6D22"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "MatrixMedsAuthStack/MatrixMedsUserPool/MatrixMedsDomain/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/zPSMzIw0jNQTCwv1k1OydbNyUzSqw4uSUzO1gEKxSfnp+dlluTrVYcWpxYF5Ofn6Din5cHZMIZzTmZqXgmyFFQExnXJz03MzENWABGpBQn5l5YUlJbU6gRUlmTk5+kb6xkCkWJWcWamblFpXklmbqpeEIQGAADlm7WtAAAA"
+   },
+   "Metadata": {
+    "aws:cdk:path": "MatrixMedsAuthStack/CDKMetadata/Default"
+   }
+  }
+ },
+ "Outputs": {
+  "UserPoolId": {
+   "Description": "Cognito User Pool ID",
+   "Value": {
+    "Ref": "MatrixMedsUserPool096B6D22"
+   }
+  },
+  "ClientId": {
+   "Description": "Cognito App Client ID",
+   "Value": {
+    "Ref": "MatrixMedsUserPoolMatrixMedsClient44A88510"
+   }
+  },
+  "UserPoolDomain": {
+   "Description": "Cognito User Pool Domain",
+   "Value": "matrixmeds.auth.us-east-1.amazoncognito.com"
+  },
+  "ExportsOutputRefMatrixMedsUserPool096B6D22859AAFC8": {
+   "Value": {
+    "Ref": "MatrixMedsUserPool096B6D22"
+   },
+   "Export": {
+    "Name": "MatrixMedsAuthStack:ExportsOutputRefMatrixMedsUserPool096B6D22859AAFC8"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

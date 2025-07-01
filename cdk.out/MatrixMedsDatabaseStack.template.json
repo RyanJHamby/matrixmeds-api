@@ -1,0 +1,131 @@
+{
+ "Resources": {
+  "MatrixMedsTableABB6C829": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "medication1",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "medication2",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "GlobalSecondaryIndexes": [
+     {
+      "IndexName": "ReverseLookup",
+      "KeySchema": [
+       {
+        "AttributeName": "medication2",
+        "KeyType": "HASH"
+       },
+       {
+        "AttributeName": "medication1",
+        "KeyType": "RANGE"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     }
+    ],
+    "KeySchema": [
+     {
+      "AttributeName": "medication1",
+      "KeyType": "HASH"
+     },
+     {
+      "AttributeName": "medication2",
+      "KeyType": "RANGE"
+     }
+    ],
+    "PointInTimeRecoverySpecification": {
+     "PointInTimeRecoveryEnabled": true
+    },
+    "StreamSpecification": {
+     "StreamViewType": "NEW_AND_OLD_IMAGES"
+    },
+    "TableName": "matrixmeds-interactions"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "MatrixMedsDatabaseStack/MatrixMedsTable/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/zPSMzIw0jNQTCwv1k1OydbNyUzSqw4uSUzO1gEKxadU5iXm5qcAxUISk3JSdZzT8sCMWp2g1OL80qJksJB/aUlBaUmtTkBlSUZ+nr6xniEQKWYVZ2bqFpXmlWTmpuoFQWgAUcmAwW8AAAA="
+   },
+   "Metadata": {
+    "aws:cdk:path": "MatrixMedsDatabaseStack/CDKMetadata/Default"
+   }
+  }
+ },
+ "Outputs": {
+  "TableName": {
+   "Description": "DynamoDB Table Name",
+   "Value": {
+    "Ref": "MatrixMedsTableABB6C829"
+   }
+  },
+  "TableArn": {
+   "Description": "DynamoDB Table ARN",
+   "Value": {
+    "Fn::GetAtt": [
+     "MatrixMedsTableABB6C829",
+     "Arn"
+    ]
+   }
+  },
+  "ExportsOutputFnGetAttMatrixMedsTableABB6C829Arn8928D82E": {
+   "Value": {
+    "Fn::GetAtt": [
+     "MatrixMedsTableABB6C829",
+     "Arn"
+    ]
+   },
+   "Export": {
+    "Name": "MatrixMedsDatabaseStack:ExportsOutputFnGetAttMatrixMedsTableABB6C829Arn8928D82E"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

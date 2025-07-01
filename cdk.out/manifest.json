@@ -1,0 +1,583 @@
+{
+  "version": "44.0.0",
+  "artifacts": {
+    "MatrixMedsDatabaseStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "MatrixMedsDatabaseStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "MatrixMedsDatabaseStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://476219038852/us-east-1",
+      "properties": {
+        "templateFile": "MatrixMedsDatabaseStack.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::476219038852:role/cdk-hnb659fds-deploy-role-476219038852-us-east-1",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::476219038852:role/cdk-hnb659fds-cfn-exec-role-476219038852-us-east-1",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-476219038852-us-east-1/63ed686aa57737b89d80c1774a772ca0ece481fa38c5b68cdf00d039b2a85a85.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "MatrixMedsDatabaseStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::476219038852:role/cdk-hnb659fds-lookup-role-476219038852-us-east-1",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "MatrixMedsDatabaseStack.assets"
+      ],
+      "metadata": {
+        "/MatrixMedsDatabaseStack/MatrixMedsTable": [
+          {
+            "type": "aws:cdk:hasPhysicalName",
+            "data": {
+              "Ref": "MatrixMedsTableABB6C829"
+            }
+          }
+        ],
+        "/MatrixMedsDatabaseStack/MatrixMedsTable/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsTableABB6C829"
+          }
+        ],
+        "/MatrixMedsDatabaseStack/TableName": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TableName"
+          }
+        ],
+        "/MatrixMedsDatabaseStack/TableArn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TableArn"
+          }
+        ],
+        "/MatrixMedsDatabaseStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/MatrixMedsDatabaseStack/Exports/Output{\"Fn::GetAtt\":[\"MatrixMedsTableABB6C829\",\"Arn\"]}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputFnGetAttMatrixMedsTableABB6C829Arn8928D82E"
+          }
+        ],
+        "/MatrixMedsDatabaseStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/MatrixMedsDatabaseStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "MatrixMedsDatabaseStack"
+    },
+    "MatrixMedsAuthStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "MatrixMedsAuthStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "MatrixMedsAuthStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://476219038852/us-east-1",
+      "properties": {
+        "templateFile": "MatrixMedsAuthStack.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::476219038852:role/cdk-hnb659fds-deploy-role-476219038852-us-east-1",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::476219038852:role/cdk-hnb659fds-cfn-exec-role-476219038852-us-east-1",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-476219038852-us-east-1/e6ea91f9e2b54966f34c59d72d1b18ea7448735837b17a61b8c9b008957ec369.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "MatrixMedsAuthStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::476219038852:role/cdk-hnb659fds-lookup-role-476219038852-us-east-1",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "MatrixMedsAuthStack.assets"
+      ],
+      "metadata": {
+        "/MatrixMedsAuthStack/MatrixMedsUserPool/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsUserPool096B6D22"
+          }
+        ],
+        "/MatrixMedsAuthStack/MatrixMedsUserPool/MatrixMedsClient/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsUserPoolMatrixMedsClient44A88510"
+          }
+        ],
+        "/MatrixMedsAuthStack/MatrixMedsUserPool/MatrixMedsDomain/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsUserPoolMatrixMedsDomainA6899774"
+          }
+        ],
+        "/MatrixMedsAuthStack/UserPoolId": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "UserPoolId"
+          }
+        ],
+        "/MatrixMedsAuthStack/ClientId": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ClientId"
+          }
+        ],
+        "/MatrixMedsAuthStack/UserPoolDomain": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "UserPoolDomain"
+          }
+        ],
+        "/MatrixMedsAuthStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/MatrixMedsAuthStack/Exports/Output{\"Ref\":\"MatrixMedsUserPool096B6D22\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputRefMatrixMedsUserPool096B6D22859AAFC8"
+          }
+        ],
+        "/MatrixMedsAuthStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/MatrixMedsAuthStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "MatrixMedsAuthStack"
+    },
+    "MatrixMedsEcsStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "MatrixMedsEcsStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "MatrixMedsEcsStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://476219038852/us-east-1",
+      "properties": {
+        "templateFile": "MatrixMedsEcsStack.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::476219038852:role/cdk-hnb659fds-deploy-role-476219038852-us-east-1",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::476219038852:role/cdk-hnb659fds-cfn-exec-role-476219038852-us-east-1",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-476219038852-us-east-1/20fccc145bef3a25bc28b0b8023ad4b0d41e70a952d3bbf229e920455c1aa447.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "MatrixMedsEcsStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::476219038852:role/cdk-hnb659fds-lookup-role-476219038852-us-east-1",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "MatrixMedsDatabaseStack",
+        "MatrixMedsAuthStack",
+        "MatrixMedsEcsStack.assets"
+      ],
+      "metadata": {
+        "/MatrixMedsEcsStack/MatrixMedsRepository/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsRepository6BE76FC8"
+          }
+        ],
+        "/MatrixMedsEcsStack/MatrixMedsRepository/AutoDeleteImagesCustomResource/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsRepositoryAutoDeleteImagesCustomResource53679FB5"
+          }
+        ],
+        "/MatrixMedsEcsStack/Custom::ECRAutoDeleteImagesCustomResourceProvider": [
+          {
+            "type": "aws:cdk:is-custom-resource-handler-customResourceProvider",
+            "data": true
+          }
+        ],
+        "/MatrixMedsEcsStack/Custom::ECRAutoDeleteImagesCustomResourceProvider/Role": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomECRAutoDeleteImagesCustomResourceProviderRole665F2773"
+          }
+        ],
+        "/MatrixMedsEcsStack/Custom::ECRAutoDeleteImagesCustomResourceProvider/Handler": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomECRAutoDeleteImagesCustomResourceProviderHandler8D89C030"
+          }
+        ],
+        "/MatrixMedsEcsStack/MatrixMedsCluster/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsClusterA1C48B25"
+          }
+        ],
+        "/MatrixMedsEcsStack/MatrixMedsCluster/Vpc/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsClusterVpcD5AED0C4"
+          }
+        ],
+        "/MatrixMedsEcsStack/MatrixMedsCluster/Vpc/PublicSubnet1/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsClusterVpcPublicSubnet1Subnet988AC04C"
+          }
+        ],
+        "/MatrixMedsEcsStack/MatrixMedsCluster/Vpc/PublicSubnet1/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsClusterVpcPublicSubnet1RouteTable121E3461"
+          }
+        ],
+        "/MatrixMedsEcsStack/MatrixMedsCluster/Vpc/PublicSubnet1/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsClusterVpcPublicSubnet1RouteTableAssociation1E264322"
+          }
+        ],
+        "/MatrixMedsEcsStack/MatrixMedsCluster/Vpc/PublicSubnet1/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsClusterVpcPublicSubnet1DefaultRoute6CE9C509"
+          }
+        ],
+        "/MatrixMedsEcsStack/MatrixMedsCluster/Vpc/PublicSubnet1/EIP": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsClusterVpcPublicSubnet1EIPB23AE4F4"
+          }
+        ],
+        "/MatrixMedsEcsStack/MatrixMedsCluster/Vpc/PublicSubnet1/NATGateway": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsClusterVpcPublicSubnet1NATGatewayC04835D1"
+          }
+        ],
+        "/MatrixMedsEcsStack/MatrixMedsCluster/Vpc/PublicSubnet2/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsClusterVpcPublicSubnet2Subnet05E03E48"
+          }
+        ],
+        "/MatrixMedsEcsStack/MatrixMedsCluster/Vpc/PublicSubnet2/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsClusterVpcPublicSubnet2RouteTableD983CE97"
+          }
+        ],
+        "/MatrixMedsEcsStack/MatrixMedsCluster/Vpc/PublicSubnet2/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsClusterVpcPublicSubnet2RouteTableAssociation5ED13CEA"
+          }
+        ],
+        "/MatrixMedsEcsStack/MatrixMedsCluster/Vpc/PublicSubnet2/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsClusterVpcPublicSubnet2DefaultRoute5651CDF0"
+          }
+        ],
+        "/MatrixMedsEcsStack/MatrixMedsCluster/Vpc/PublicSubnet2/EIP": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsClusterVpcPublicSubnet2EIPAF6B90DB"
+          }
+        ],
+        "/MatrixMedsEcsStack/MatrixMedsCluster/Vpc/PublicSubnet2/NATGateway": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsClusterVpcPublicSubnet2NATGateway6E27D74E"
+          }
+        ],
+        "/MatrixMedsEcsStack/MatrixMedsCluster/Vpc/PrivateSubnet1/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsClusterVpcPrivateSubnet1Subnet3CFAB09E"
+          }
+        ],
+        "/MatrixMedsEcsStack/MatrixMedsCluster/Vpc/PrivateSubnet1/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsClusterVpcPrivateSubnet1RouteTableAF74BA19"
+          }
+        ],
+        "/MatrixMedsEcsStack/MatrixMedsCluster/Vpc/PrivateSubnet1/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsClusterVpcPrivateSubnet1RouteTableAssociation476B5A50"
+          }
+        ],
+        "/MatrixMedsEcsStack/MatrixMedsCluster/Vpc/PrivateSubnet1/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsClusterVpcPrivateSubnet1DefaultRouteF95285B7"
+          }
+        ],
+        "/MatrixMedsEcsStack/MatrixMedsCluster/Vpc/PrivateSubnet2/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsClusterVpcPrivateSubnet2Subnet37036E56"
+          }
+        ],
+        "/MatrixMedsEcsStack/MatrixMedsCluster/Vpc/PrivateSubnet2/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsClusterVpcPrivateSubnet2RouteTable550A4100"
+          }
+        ],
+        "/MatrixMedsEcsStack/MatrixMedsCluster/Vpc/PrivateSubnet2/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsClusterVpcPrivateSubnet2RouteTableAssociationBAB491A9"
+          }
+        ],
+        "/MatrixMedsEcsStack/MatrixMedsCluster/Vpc/PrivateSubnet2/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsClusterVpcPrivateSubnet2DefaultRoute4DCACB43"
+          }
+        ],
+        "/MatrixMedsEcsStack/MatrixMedsCluster/Vpc/IGW": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsClusterVpcIGWD0618D85"
+          }
+        ],
+        "/MatrixMedsEcsStack/MatrixMedsCluster/Vpc/VPCGW": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsClusterVpcVPCGWF8BA1578"
+          }
+        ],
+        "/MatrixMedsEcsStack/MatrixMedsTaskRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsTaskRole9F2FF266"
+          }
+        ],
+        "/MatrixMedsEcsStack/MatrixMedsTaskRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsTaskRoleDefaultPolicy4B7F65B3"
+          }
+        ],
+        "/MatrixMedsEcsStack/MatrixMedsService/LB/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsServiceLB74EF0348"
+          }
+        ],
+        "/MatrixMedsEcsStack/MatrixMedsService/LB/SecurityGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsServiceLBSecurityGroupECD358EF"
+          }
+        ],
+        "/MatrixMedsEcsStack/MatrixMedsService/LB/SecurityGroup/to MatrixMedsEcsStackMatrixMedsServiceSecurityGroup0FCA8BE6:8000": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsServiceLBSecurityGrouptoMatrixMedsEcsStackMatrixMedsServiceSecurityGroup0FCA8BE68000BA4942BB"
+          }
+        ],
+        "/MatrixMedsEcsStack/MatrixMedsService/LB/PublicListener/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsServiceLBPublicListenerE58CDCF3"
+          }
+        ],
+        "/MatrixMedsEcsStack/MatrixMedsService/LB/PublicListener/ECSGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsServiceLBPublicListenerECSGroup5C721837"
+          }
+        ],
+        "/MatrixMedsEcsStack/MatrixMedsService/LoadBalancerDNS": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsServiceLoadBalancerDNS6A56EB08"
+          }
+        ],
+        "/MatrixMedsEcsStack/MatrixMedsService/ServiceURL": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsServiceServiceURL1D2AD329"
+          }
+        ],
+        "/MatrixMedsEcsStack/MatrixMedsService/TaskDef/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsServiceTaskDefCC0C2E49"
+          }
+        ],
+        "/MatrixMedsEcsStack/MatrixMedsService/TaskDef/web/LogGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsServiceTaskDefwebLogGroupE45AFE07"
+          }
+        ],
+        "/MatrixMedsEcsStack/MatrixMedsService/TaskDef/ExecutionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsServiceTaskDefExecutionRoleBE226085"
+          }
+        ],
+        "/MatrixMedsEcsStack/MatrixMedsService/TaskDef/ExecutionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsServiceTaskDefExecutionRoleDefaultPolicyF82A82F2"
+          }
+        ],
+        "/MatrixMedsEcsStack/MatrixMedsService/Service": [
+          {
+            "type": "aws:cdk:warning",
+            "data": "minHealthyPercent has not been configured so the default value of 50% is used. The number of running tasks will decrease below the desired count during deployments etc. See https://github.com/aws/aws-cdk/issues/31705 [ack: @aws-cdk/aws-ecs:minHealthyPercent]",
+            "trace": [
+              "Annotations.addMessage (/var/folders/n7/6rffgrz57nz8jmz85gl_0rwh0000gn/T/jsii-kernel-nT63FS/node_modules/aws-cdk-lib/core/lib/annotations.js:1:1709)",
+              "Annotations.addWarningV2 (/var/folders/n7/6rffgrz57nz8jmz85gl_0rwh0000gn/T/jsii-kernel-nT63FS/node_modules/aws-cdk-lib/core/lib/annotations.js:1:896)",
+              "new BaseService (/var/folders/n7/6rffgrz57nz8jmz85gl_0rwh0000gn/T/jsii-kernel-nT63FS/node_modules/aws-cdk-lib/aws-ecs/lib/base/base-service.js:1:8201)",
+              "new FargateService2 (/var/folders/n7/6rffgrz57nz8jmz85gl_0rwh0000gn/T/jsii-kernel-nT63FS/node_modules/aws-cdk-lib/aws-ecs/lib/fargate/fargate-service.js:1:3888)",
+              "new FargateService2 (/var/folders/n7/6rffgrz57nz8jmz85gl_0rwh0000gn/T/jsii-kernel-nT63FS/node_modules/aws-cdk-lib/core/lib/prop-injectable.js:1:488)",
+              "new ApplicationLoadBalancedFargateService2 (/var/folders/n7/6rffgrz57nz8jmz85gl_0rwh0000gn/T/jsii-kernel-nT63FS/node_modules/aws-cdk-lib/aws-ecs-patterns/lib/fargate/application-load-balanced-fargate-service.js:1:4035)",
+              "new ApplicationLoadBalancedFargateService2 (/var/folders/n7/6rffgrz57nz8jmz85gl_0rwh0000gn/T/jsii-kernel-nT63FS/node_modules/aws-cdk-lib/core/lib/prop-injectable.js:1:488)",
+              "Kernel._Kernel_create (/private/var/folders/n7/6rffgrz57nz8jmz85gl_0rwh0000gn/T/tmp6orxc6ju/lib/program.js:548:25)",
+              "Kernel.create (/private/var/folders/n7/6rffgrz57nz8jmz85gl_0rwh0000gn/T/tmp6orxc6ju/lib/program.js:218:93)",
+              "KernelHost.processRequest (/private/var/folders/n7/6rffgrz57nz8jmz85gl_0rwh0000gn/T/tmp6orxc6ju/lib/program.js:15467:36)",
+              "KernelHost.run (/private/var/folders/n7/6rffgrz57nz8jmz85gl_0rwh0000gn/T/tmp6orxc6ju/lib/program.js:15427:22)",
+              "Immediate._onImmediate (/private/var/folders/n7/6rffgrz57nz8jmz85gl_0rwh0000gn/T/tmp6orxc6ju/lib/program.js:15428:46)",
+              "process.processImmediate (node:internal/timers:511:21)"
+            ]
+          }
+        ],
+        "/MatrixMedsEcsStack/MatrixMedsService/Service/Service": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsServiceB69B7C92"
+          }
+        ],
+        "/MatrixMedsEcsStack/MatrixMedsService/Service/SecurityGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsServiceSecurityGroupCBF965BF"
+          }
+        ],
+        "/MatrixMedsEcsStack/MatrixMedsService/Service/SecurityGroup/from MatrixMedsEcsStackMatrixMedsServiceLBSecurityGroupE0D766E4:8000": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsServiceSecurityGroupfromMatrixMedsEcsStackMatrixMedsServiceLBSecurityGroupE0D766E48000F2763C86"
+          }
+        ],
+        "/MatrixMedsEcsStack/MatrixMedsService/Service/TaskCount/Target/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsServiceTaskCountTarget0F00DAAF"
+          }
+        ],
+        "/MatrixMedsEcsStack/MatrixMedsService/Service/TaskCount/Target/CpuScaling/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsServiceTaskCountTargetCpuScaling1E2AAA15"
+          }
+        ],
+        "/MatrixMedsEcsStack/MatrixMedsService/Service/TaskCount/Target/MemoryScaling/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsServiceTaskCountTargetMemoryScaling3D346232"
+          }
+        ],
+        "/MatrixMedsEcsStack/HighCpuAlarm/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HighCpuAlarm40723000"
+          }
+        ],
+        "/MatrixMedsEcsStack/HighMemoryAlarm/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HighMemoryAlarmB77DAB20"
+          }
+        ],
+        "/MatrixMedsEcsStack/LoadBalancerDNS": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LoadBalancerDNS"
+          }
+        ],
+        "/MatrixMedsEcsStack/RepositoryURI": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RepositoryURI"
+          }
+        ],
+        "/MatrixMedsEcsStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/MatrixMedsEcsStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/MatrixMedsEcsStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "MatrixMedsEcsStack"
+    },
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    }
+  },
+  "minimumCliVersion": "2.1020.0"
+}

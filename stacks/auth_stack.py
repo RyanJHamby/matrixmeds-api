@@ -1,6 +1,7 @@
 from aws_cdk import (
     Stack,
     aws_cognito as cognito,
+    Duration,
     RemovalPolicy,
     CfnOutput
 )
@@ -33,9 +34,7 @@ class AuthStack(Stack):
             ),
             removal_policy=RemovalPolicy.DESTROY,
             account_recovery=cognito.AccountRecovery.EMAIL_ONLY,
-            auto_verify=cognito.AutoVerify(
-                email=True
-            ),
+            auto_verify={"email": True},
             mfa=cognito.Mfa.OFF,
             user_verification=cognito.UserVerificationConfig(
                 email_style=cognito.VerificationEmailStyle.CODE
@@ -49,7 +48,6 @@ class AuthStack(Stack):
             generate_secret=False,
             auth_flows=cognito.AuthFlow(
                 user_srp=True,
-                refresh_token=True,
                 custom=True
             ),
             o_auth=cognito.OAuthSettings(
