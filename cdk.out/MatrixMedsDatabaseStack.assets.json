@@ -1,7 +1,7 @@
 {
-  "version": "44.0.0",
+  "version": "41.0.0",
   "files": {
-    "4bdcf602e511473b0c8f0db5ba1a2e2bd81aaa0b08977c7d11604e3d22227bfa": {
+    "dd8de035e0bf8eaf90bcbfc9e0c7ac96cf92ad377f93a7ff39cac5917e15c223": {
       "displayName": "MatrixMedsDatabaseStack Template",
       "source": {
         "path": "MatrixMedsDatabaseStack.template.json",
@@ -10,7 +10,7 @@
       "destinations": {
         "476219038852-us-east-1": {
           "bucketName": "cdk-hnb659fds-assets-476219038852-us-east-1",
-          "objectKey": "4bdcf602e511473b0c8f0db5ba1a2e2bd81aaa0b08977c7d11604e3d22227bfa.json",
+          "objectKey": "dd8de035e0bf8eaf90bcbfc9e0c7ac96cf92ad377f93a7ff39cac5917e15c223.json",
           "region": "us-east-1",
           "assumeRoleArn": "arn:${AWS::Partition}:iam::476219038852:role/cdk-hnb659fds-file-publishing-role-476219038852-us-east-1"
         }

@@ -1,7 +1,7 @@
 {
-  "version": "44.0.0",
+  "version": "41.0.0",
   "files": {
-    "16ec07f801cd7d28d3ddcd25b9c3add667b0b36dbe68b9e9fd08864774992dbe": {
+    "4655e5d31c0e76d1625dcaab2edd3f946a63d341f632882679f5e2d2470433ef": {
       "displayName": "MatrixMedsLambdaStack Template",
       "source": {
         "path": "MatrixMedsLambdaStack.template.json",
@@ -10,12 +10,27 @@
       "destinations": {
         "476219038852-us-east-1": {
           "bucketName": "cdk-hnb659fds-assets-476219038852-us-east-1",
-          "objectKey": "16ec07f801cd7d28d3ddcd25b9c3add667b0b36dbe68b9e9fd08864774992dbe.json",
+          "objectKey": "4655e5d31c0e76d1625dcaab2edd3f946a63d341f632882679f5e2d2470433ef.json",
           "region": "us-east-1",
           "assumeRoleArn": "arn:${AWS::Partition}:iam::476219038852:role/cdk-hnb659fds-file-publishing-role-476219038852-us-east-1"
         }
       }
     }
   },
-  "dockerImages": {}
+  "dockerImages": {
+    "7de7ccefad6e9bf798880f44bf6b6168ca250f1ac9d7b9a48104503559514f5d": {
+      "displayName": "LambdaImage",
+      "source": {
+        "directory": "asset.7de7ccefad6e9bf798880f44bf6b6168ca250f1ac9d7b9a48104503559514f5d"
+      },
+      "destinations": {
+        "476219038852-us-east-1": {
+          "repositoryName": "cdk-hnb659fds-container-assets-476219038852-us-east-1",
+          "imageTag": "7de7ccefad6e9bf798880f44bf6b6168ca250f1ac9d7b9a48104503559514f5d",
+          "region": "us-east-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::476219038852:role/cdk-hnb659fds-image-publishing-role-476219038852-us-east-1"
+        }
+      }
+    }
+  }
 }

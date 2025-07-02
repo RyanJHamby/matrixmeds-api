@@ -116,7 +116,7 @@
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/zPSMzIw0jNQTCwv1k1OydbNyUzSqw4uSUzO1gEKxSfnp+dlluTrVYcWpxYF5Ofn6Din5cHZMIZzTmZqXgmyFFQExnXJz03MzENWABGpBQn5l5YUlJbU6gRUlmTk5+kb6xkCkWJWcWamblFpXklmbqpeEIQGAADlm7WtAAAA"
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/zPSM7Q01jNQTCwv1k1OydbNyUzSqw4uSUzO1gEKxSfnp+dlluTrVYcWpxYF5Ofn6Din5cHZMIZzTmZqXgmyFFQExnXJz03MzENWABGpBQn5l5YUlJbU6gRUlmTk5+kb6xkCkWJWcWamblFpXklmbqpeEIQGALM4KX6tAAAA"
    },
    "Metadata": {
     "aws:cdk:path": "MatrixMedsAuthStack/CDKMetadata/Default"

@@ -1,28 +1,28 @@
 {
-  "version": "44.0.0",
+  "version": "41.0.0",
   "artifacts": {
-    "MatrixMedsDatabaseStack.assets": {
+    "MatrixMedsStack.assets": {
       "type": "cdk:asset-manifest",
       "properties": {
-        "file": "MatrixMedsDatabaseStack.assets.json",
+        "file": "MatrixMedsStack.assets.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
       }
     },
-    "MatrixMedsDatabaseStack": {
+    "MatrixMedsStack": {
       "type": "aws:cloudformation:stack",
       "environment": "aws://476219038852/us-east-1",
       "properties": {
-        "templateFile": "MatrixMedsDatabaseStack.template.json",
+        "templateFile": "MatrixMedsStack.template.json",
         "terminationProtection": false,
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::476219038852:role/cdk-hnb659fds-deploy-role-476219038852-us-east-1",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::476219038852:role/cdk-hnb659fds-cfn-exec-role-476219038852-us-east-1",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-476219038852-us-east-1/4bdcf602e511473b0c8f0db5ba1a2e2bd81aaa0b08977c7d11604e3d22227bfa.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-476219038852-us-east-1/46b80bd6a9c63670ab483eb0e0f882eaa0665cc21c2893524f34958ceb9125cf.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
-          "MatrixMedsDatabaseStack.assets"
+          "MatrixMedsStack.assets"
         ],
         "lookupRole": {
           "arn": "arn:${AWS::Partition}:iam::476219038852:role/cdk-hnb659fds-lookup-role-476219038852-us-east-1",
@@ -31,10 +31,40 @@
         }
       },
       "dependencies": [
-        "MatrixMedsDatabaseStack.assets"
+        "MatrixMedsStack.assets"
       ],
       "metadata": {
-        "/MatrixMedsDatabaseStack/MatrixMedsTable": [
+        "/MatrixMedsStack/MatrixMedsRepository/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsRepository6BE76FC8"
+          }
+        ],
+        "/MatrixMedsStack/MatrixMedsRepository/AutoDeleteImagesCustomResource/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MatrixMedsRepositoryAutoDeleteImagesCustomResource53679FB5"
+          }
+        ],
+        "/MatrixMedsStack/Custom::ECRAutoDeleteImagesCustomResourceProvider": [
+          {
+            "type": "aws:cdk:is-custom-resource-handler-customResourceProvider",
+            "data": true
+          }
+        ],
+        "/MatrixMedsStack/Custom::ECRAutoDeleteImagesCustomResourceProvider/Role": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomECRAutoDeleteImagesCustomResourceProviderRole665F2773"
+          }
+        ],
+        "/MatrixMedsStack/Custom::ECRAutoDeleteImagesCustomResourceProvider/Handler": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomECRAutoDeleteImagesCustomResourceProviderHandler8D89C030"
+          }
+        ],
+        "/MatrixMedsStack/MatrixMedsTable": [
           {
             "type": "aws:cdk:hasPhysicalName",
             "data": {
@@ -42,44 +72,62 @@
             }
           }
         ],
-        "/MatrixMedsDatabaseStack/MatrixMedsTable/Resource": [
+        "/MatrixMedsStack/MatrixMedsTable/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "MatrixMedsTableABB6C829"
           }
         ],
-        "/MatrixMedsDatabaseStack/TableName": [
+        "/MatrixMedsStack/MatrixMedsUserPool/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "TableName"
+            "data": "MatrixMedsUserPool096B6D22"
           }
         ],
-        "/MatrixMedsDatabaseStack/TableArn": [
+        "/MatrixMedsStack/MatrixMedsUserPool/MatrixMedsClient/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "TableArn"
+            "data": "MatrixMedsUserPoolMatrixMedsClient44A88510"
           }
         ],
-        "/MatrixMedsDatabaseStack/CDKMetadata/Default": [
+        "/MatrixMedsStack/UserPoolId": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "UserPoolId"
+          }
+        ],
+        "/MatrixMedsStack/ClientId": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ClientId"
+          }
+        ],
+        "/MatrixMedsStack/RepositoryURI": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RepositoryURI"
+          }
+        ],
+        "/MatrixMedsStack/CDKMetadata/Default": [
           {
             "type": "aws:cdk:logicalId",
             "data": "CDKMetadata"
           }
         ],
-        "/MatrixMedsDatabaseStack/BootstrapVersion": [
+        "/MatrixMedsStack/BootstrapVersion": [
           {
             "type": "aws:cdk:logicalId",
             "data": "BootstrapVersion"
           }
         ],
-        "/MatrixMedsDatabaseStack/CheckBootstrapVersion": [
+        "/MatrixMedsStack/CheckBootstrapVersion": [
           {
             "type": "aws:cdk:logicalId",
             "data": "CheckBootstrapVersion"
           }
         ]
       },
-      "displayName": "MatrixMedsDatabaseStack"
+      "displayName": "MatrixMedsStack"
     },
     "MatrixMedsAuthStack.assets": {
       "type": "cdk:asset-manifest",
@@ -98,7 +146,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::476219038852:role/cdk-hnb659fds-deploy-role-476219038852-us-east-1",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::476219038852:role/cdk-hnb659fds-cfn-exec-role-476219038852-us-east-1",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-476219038852-us-east-1/eb9e827a07ca0e1863c9eed0e6fd9e09e52db1b488bf31e9feb196fe7757302a.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-476219038852-us-east-1/b5a3f1de7483250376081016b79369d116ed0c1887062b42b7726631802835ea.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -188,7 +236,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::476219038852:role/cdk-hnb659fds-deploy-role-476219038852-us-east-1",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::476219038852:role/cdk-hnb659fds-cfn-exec-role-476219038852-us-east-1",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-476219038852-us-east-1/16ec07f801cd7d28d3ddcd25b9c3add667b0b36dbe68b9e9fd08864774992dbe.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-476219038852-us-east-1/4655e5d31c0e76d1625dcaab2edd3f946a63d341f632882679f5e2d2470433ef.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -201,6 +249,7 @@
         }
       },
       "dependencies": [
+        "MatrixMedsStack",
         "MatrixMedsLambdaStack.assets"
       ],
       "metadata": {
@@ -280,5 +329,5 @@
       }
     }
   },
-  "minimumCliVersion": "2.1020.0"
+  "minimumCliVersion": "2.1005.0"
 }

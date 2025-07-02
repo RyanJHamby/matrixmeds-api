@@ -1,0 +1,377 @@
+{
+ "Resources": {
+  "MatrixMedsRepository6BE76FC8": {
+   "Type": "AWS::ECR::Repository",
+   "Properties": {
+    "RepositoryName": "matrixmeds-api",
+    "Tags": [
+     {
+      "Key": "aws-cdk:auto-delete-images",
+      "Value": "true"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "MatrixMedsStack/MatrixMedsRepository/Resource"
+   }
+  },
+  "MatrixMedsRepositoryAutoDeleteImagesCustomResource53679FB5": {
+   "Type": "Custom::ECRAutoDeleteImages",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "CustomECRAutoDeleteImagesCustomResourceProviderHandler8D89C030",
+      "Arn"
+     ]
+    },
+    "RepositoryName": {
+     "Ref": "MatrixMedsRepository6BE76FC8"
+    }
+   },
+   "DependsOn": [
+    "MatrixMedsRepository6BE76FC8"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "MatrixMedsStack/MatrixMedsRepository/AutoDeleteImagesCustomResource/Default"
+   }
+  },
+  "CustomECRAutoDeleteImagesCustomResourceProviderRole665F2773": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Version": "2012-10-17",
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ]
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Sub": "arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+     }
+    ],
+    "Policies": [
+     {
+      "PolicyName": "Inline",
+      "PolicyDocument": {
+       "Version": "2012-10-17",
+       "Statement": [
+        {
+         "Effect": "Allow",
+         "Action": [
+          "ecr:BatchDeleteImage",
+          "ecr:DescribeRepositories",
+          "ecr:ListImages",
+          "ecr:ListTagsForResource"
+         ],
+         "Resource": [
+          {
+           "Fn::Join": [
+            "",
+            [
+             "arn:",
+             {
+              "Ref": "AWS::Partition"
+             },
+             ":ecr:us-east-1:476219038852:repository/*"
+            ]
+           ]
+          }
+         ],
+         "Condition": {
+          "StringEquals": {
+           "ecr:ResourceTag/aws-cdk:auto-delete-images": "true"
+          }
+         }
+        }
+       ]
+      }
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "MatrixMedsStack/Custom::ECRAutoDeleteImagesCustomResourceProvider/Role"
+   }
+  },
+  "CustomECRAutoDeleteImagesCustomResourceProviderHandler8D89C030": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-476219038852-us-east-1",
+     "S3Key": "35a53bc183aaf4d7fe84d5e5ed06d48f33ef294fa1325c16cf5db800fa6ee72d.zip"
+    },
+    "Timeout": 900,
+    "MemorySize": 128,
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "CustomECRAutoDeleteImagesCustomResourceProviderRole665F2773",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs20.x",
+    "Description": {
+     "Fn::Join": [
+      "",
+      [
+       "Lambda function for auto-deleting images in ",
+       {
+        "Ref": "MatrixMedsRepository6BE76FC8"
+       },
+       " repository."
+      ]
+     ]
+    }
+   },
+   "DependsOn": [
+    "CustomECRAutoDeleteImagesCustomResourceProviderRole665F2773"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "MatrixMedsStack/Custom::ECRAutoDeleteImagesCustomResourceProvider/Handler",
+    "aws:asset:path": "asset.35a53bc183aaf4d7fe84d5e5ed06d48f33ef294fa1325c16cf5db800fa6ee72d",
+    "aws:asset:property": "Code"
+   }
+  },
+  "MatrixMedsTableABB6C829": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "medication1",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "medication2",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "KeySchema": [
+     {
+      "AttributeName": "medication1",
+      "KeyType": "HASH"
+     },
+     {
+      "AttributeName": "medication2",
+      "KeyType": "RANGE"
+     }
+    ],
+    "TableName": "matrixmeds-interactions"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "MatrixMedsStack/MatrixMedsTable/Resource"
+   }
+  },
+  "MatrixMedsUserPool096B6D22": {
+   "Type": "AWS::Cognito::UserPool",
+   "Properties": {
+    "AccountRecoverySetting": {
+     "RecoveryMechanisms": [
+      {
+       "Name": "verified_phone_number",
+       "Priority": 1
+      },
+      {
+       "Name": "verified_email",
+       "Priority": 2
+      }
+     ]
+    },
+    "AdminCreateUserConfig": {
+     "AllowAdminCreateUserOnly": false
+    },
+    "AutoVerifiedAttributes": [
+     "email"
+    ],
+    "EmailVerificationMessage": "The verification code to your new account is {####}",
+    "EmailVerificationSubject": "Verify your new account",
+    "Policies": {
+     "PasswordPolicy": {
+      "MinimumLength": 8,
+      "RequireLowercase": true,
+      "RequireNumbers": true,
+      "RequireSymbols": true,
+      "RequireUppercase": true
+     }
+    },
+    "Schema": [
+     {
+      "Mutable": true,
+      "Name": "email",
+      "Required": true
+     }
+    ],
+    "SmsVerificationMessage": "The verification code to your new account is {####}",
+    "UserPoolName": "matrixmeds-users",
+    "UsernameAttributes": [
+     "email"
+    ],
+    "VerificationMessageTemplate": {
+     "DefaultEmailOption": "CONFIRM_WITH_CODE",
+     "EmailMessage": "The verification code to your new account is {####}",
+     "EmailSubject": "Verify your new account",
+     "SmsMessage": "The verification code to your new account is {####}"
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "MatrixMedsStack/MatrixMedsUserPool/Resource"
+   }
+  },
+  "MatrixMedsUserPoolMatrixMedsClient44A88510": {
+   "Type": "AWS::Cognito::UserPoolClient",
+   "Properties": {
+    "AllowedOAuthFlows": [
+     "implicit",
+     "code"
+    ],
+    "AllowedOAuthFlowsUserPoolClient": true,
+    "AllowedOAuthScopes": [
+     "profile",
+     "phone",
+     "email",
+     "openid",
+     "aws.cognito.signin.user.admin"
+    ],
+    "CallbackURLs": [
+     "https://example.com"
+    ],
+    "ClientName": "matrixmeds-client",
+    "ExplicitAuthFlows": [
+     "ALLOW_USER_SRP_AUTH",
+     "ALLOW_REFRESH_TOKEN_AUTH"
+    ],
+    "GenerateSecret": false,
+    "SupportedIdentityProviders": [
+     "COGNITO"
+    ],
+    "UserPoolId": {
+     "Ref": "MatrixMedsUserPool096B6D22"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "MatrixMedsStack/MatrixMedsUserPool/MatrixMedsClient/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/1WO3Q6CMAyFn8X7MX+48lJ5AAnqtZmj4hRWsnYaQvbuTgmKSZN+Pacn7Uou16lczNSTEl3ek9qcZb9npe8iSqcetJN9AS2SYXSdyC72NwVRdlY1WMbMQZ1reNsfCEJjZeOS7I8ELkes396XR8hqA5an1qCEIDJPjE0BhN5pGA6P/GflDh+mBLdVBGJDBBz/r4ytxDS889x6DiLv+Ip2nsplrNmNjEmct2wakMXQX7Xz348TAQAA"
+   },
+   "Metadata": {
+    "aws:cdk:path": "MatrixMedsStack/CDKMetadata/Default"
+   }
+  }
+ },
+ "Outputs": {
+  "UserPoolId": {
+   "Description": "Cognito User Pool ID",
+   "Value": {
+    "Ref": "MatrixMedsUserPool096B6D22"
+   }
+  },
+  "ClientId": {
+   "Description": "Cognito App Client ID",
+   "Value": {
+    "Ref": "MatrixMedsUserPoolMatrixMedsClient44A88510"
+   }
+  },
+  "RepositoryURI": {
+   "Description": "ECR Repository URI",
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      {
+       "Fn::Select": [
+        4,
+        {
+         "Fn::Split": [
+          ":",
+          {
+           "Fn::GetAtt": [
+            "MatrixMedsRepository6BE76FC8",
+            "Arn"
+           ]
+          }
+         ]
+        }
+       ]
+      },
+      ".dkr.ecr.",
+      {
+       "Fn::Select": [
+        3,
+        {
+         "Fn::Split": [
+          ":",
+          {
+           "Fn::GetAtt": [
+            "MatrixMedsRepository6BE76FC8",
+            "Arn"
+           ]
+          }
+         ]
+        }
+       ]
+      },
+      ".",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/",
+      {
+       "Ref": "MatrixMedsRepository6BE76FC8"
+      }
+     ]
+    ]
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

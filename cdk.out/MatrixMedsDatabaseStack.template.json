@@ -59,7 +59,7 @@
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/zPSMzIw0jNQTCwv1k1OydbNyUzSqw4uSUzO1gEKxadU5iXm5qcAxUISk3JSdZzT8sCMWp2g1OL80qJksJB/aUlBaUmtTkBlSUZ+nr6xniEQKWYVZ2bqFpXmlWTmpuoFQWgAUcmAwW8AAAA="
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/zPSM7Q01jNQTCwv1k1OydbNyUzSqw4uSUzO1gEKxadU5iXm5qcAxUISk3JSdZzT8sCMWp2g1OL80qJksJB/aUlBaUmtTkBlSUZ+nr6xniEQKWYVZ2bqFpXmlWTmpuoFQWgAlYzFUW8AAAA="
    },
    "Metadata": {
     "aws:cdk:path": "MatrixMedsDatabaseStack/CDKMetadata/Default"

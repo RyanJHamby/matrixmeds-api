@@ -1,0 +1,36 @@
+{
+  "version": "41.0.0",
+  "files": {
+    "35a53bc183aaf4d7fe84d5e5ed06d48f33ef294fa1325c16cf5db800fa6ee72d": {
+      "displayName": "MatrixMedsStack/Custom::ECRAutoDeleteImagesCustomResourceProvider Code",
+      "source": {
+        "path": "asset.35a53bc183aaf4d7fe84d5e5ed06d48f33ef294fa1325c16cf5db800fa6ee72d",
+        "packaging": "zip"
+      },
+      "destinations": {
+        "476219038852-us-east-1": {
+          "bucketName": "cdk-hnb659fds-assets-476219038852-us-east-1",
+          "objectKey": "35a53bc183aaf4d7fe84d5e5ed06d48f33ef294fa1325c16cf5db800fa6ee72d.zip",
+          "region": "us-east-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::476219038852:role/cdk-hnb659fds-file-publishing-role-476219038852-us-east-1"
+        }
+      }
+    },
+    "46b80bd6a9c63670ab483eb0e0f882eaa0665cc21c2893524f34958ceb9125cf": {
+      "displayName": "MatrixMedsStack Template",
+      "source": {
+        "path": "MatrixMedsStack.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "476219038852-us-east-1": {
+          "bucketName": "cdk-hnb659fds-assets-476219038852-us-east-1",
+          "objectKey": "46b80bd6a9c63670ab483eb0e0f882eaa0665cc21c2893524f34958ceb9125cf.json",
+          "region": "us-east-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::476219038852:role/cdk-hnb659fds-file-publishing-role-476219038852-us-east-1"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}

@@ -46,7 +46,10 @@
         {
          "Ref": "AWS::URLSuffix"
         },
-        "/matrixmeds-api:latest"
+        "/cdk-hnb659fds-container-assets-476219038852-us-east-1:",
+        {
+         "Fn::Sub": "476219038852.dkr.ecr.us-east-1.${AWS::URLSuffix}/cdk-hnb659fds-container-assets-476219038852-us-east-1:7de7ccefad6e9bf798880f44bf6b6168ca250f1ac9d7b9a48104503559514f5d"
+        }
        ]
       ]
      }
@@ -165,7 +168,7 @@
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/11O207DMAz9lr2n3ihfMECIPTGFD5i8zBTT5qLEYaqi/DtNJwRCsnRu1rF76Hc97DZ4TZ25jN3EZyhvgmZUi3UqZCJoCj6x+Dg/YCI1oT1fEMqTNyPFg8WBnrMzwt6px3f3lx8pWk5pUVUxWijaT9SChlVh4AGFrjh/9VBeRMI+cIsbNKl9FlrZwQkNEX+K/8nfveX1Yb2wklqVpuRzNKv3miVkqeo4y4d323u4W2bzmZi7mJ2wJdA3/AYoj/TwFwEAAA=="
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/11PXUsDMRD8LX3PRds++VgVsU+W+APKNl3P7V0+SDaWI+S/m0TEIizMzM6wy2zk+mEr71dwjYM+T8NMJ5nfGfQk6uqYUYcjxIgc5bPTE4a9gRF3bSOqJxV6F4ldWB4hopjBnM4g8032JVnN5Kx4+rC3/IDBUIxVFUFgZFZuxmY0LAI8jcB4heVrI/Mrs995anaDJpVLjJ3tLeMY4PfwP/mXq7XG/qGTUkSv0QTZUSiMLgXdA2+JfeIiDgt/Onu3les6q0skGkKyTAal+sFva+k+WkABAAA="
    },
    "Metadata": {
     "aws:cdk:path": "MatrixMedsLambdaStack/CDKMetadata/Default"
