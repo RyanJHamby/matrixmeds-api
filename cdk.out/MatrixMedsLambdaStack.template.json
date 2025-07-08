@@ -48,7 +48,7 @@
         },
         "/cdk-hnb659fds-container-assets-476219038852-us-east-1:",
         {
-         "Fn::Sub": "476219038852.dkr.ecr.us-east-1.${AWS::URLSuffix}/cdk-hnb659fds-container-assets-476219038852-us-east-1:7de7ccefad6e9bf798880f44bf6b6168ca250f1ac9d7b9a48104503559514f5d"
+         "Fn::Sub": "476219038852.dkr.ecr.us-east-1.${AWS::URLSuffix}/cdk-hnb659fds-container-assets-476219038852-us-east-1:361fb3c81fe192bc04a498aa83ced234d6d7ebad8073b5b5badd3555483d8b2b"
         }
        ]
       ]
