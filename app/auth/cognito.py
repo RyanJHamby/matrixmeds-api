@@ -23,10 +23,16 @@ class CognitoAuth:
             )
         try:
             response = self.client.get_user(AccessToken=token)
+            # Check for malformed attributes
+            for attr in response["UserAttributes"]:
+                if "Name" not in attr or "Value" not in attr:
+                    raise HTTPException(
+                        status_code=400,
+                        detail="Malformed user attribute"
+                    )
             user_attrs = {
                 attr["Name"]: attr["Value"]
                 for attr in response["UserAttributes"]
-                if "Name" in attr and "Value" in attr
             }
             return user_attrs
         except self.client.exceptions.NotAuthorizedException:
