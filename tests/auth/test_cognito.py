@@ -148,8 +148,8 @@ class TestCognitoAuth:
             mock_get_user.return_value = {"UserAttributes": malformed_attributes}
             with pytest.raises(HTTPException) as exc_info:
                 await cognito_auth_instance.validate_token("test-token-123")
-            assert exc_info.value.status_code == 401
-            assert exc_info.value.detail == "Authentication failed"
+            assert exc_info.value.status_code == 400
+            assert exc_info.value.detail == "Malformed user attribute"
 
     def test_auth_singleton_instance(self):
         """Test that auth is a singleton instance"""
@@ -232,3 +232,59 @@ class TestCognitoAuth:
             
             assert exc_info.value.status_code == 401
             assert exc_info.value.detail == "Authentication failed" 
+
+    @pytest.mark.asyncio
+    async def test_validate_token_with_both_keys_missing(self, cognito_auth_instance):
+        malformed_attributes = [
+            {},  # Both Name and Value missing
+            {"Name": "sub", "Value": "test-user-id"}
+        ]
+        with patch.object(cognito_auth_instance.client, 'get_user') as mock_get_user:
+            mock_get_user.return_value = {"UserAttributes": malformed_attributes}
+            with pytest.raises(HTTPException) as exc_info:
+                await cognito_auth_instance.validate_token("test-token-123")
+            assert exc_info.value.status_code == 400
+            assert exc_info.value.detail == "Malformed user attribute"
+
+    @pytest.mark.asyncio
+    async def test_validate_token_user_attributes_not_list(self, cognito_auth_instance):
+        with patch.object(cognito_auth_instance.client, 'get_user') as mock_get_user:
+            mock_get_user.return_value = {"UserAttributes": "not-a-list"}
+            with pytest.raises(Exception):
+                await cognito_auth_instance.validate_token("test-token-123")
+
+    @pytest.mark.asyncio
+    async def test_validate_token_user_attributes_contains_non_dict(self, cognito_auth_instance):
+        malformed_attributes = [
+            {"Name": "sub", "Value": "test-user-id"},
+            "not-a-dict"
+        ]
+        with patch.object(cognito_auth_instance.client, 'get_user') as mock_get_user:
+            mock_get_user.return_value = {"UserAttributes": malformed_attributes}
+            with pytest.raises(Exception):
+                await cognito_auth_instance.validate_token("test-token-123")
+
+    @pytest.mark.asyncio
+    async def test_validate_token_user_attributes_missing(self, cognito_auth_instance):
+        with patch.object(cognito_auth_instance.client, 'get_user') as mock_get_user:
+            mock_get_user.return_value = {}
+            with pytest.raises(Exception):
+                await cognito_auth_instance.validate_token("test-token-123")
+
+    @pytest.mark.asyncio
+    async def test_validate_token_whitespace_token(self, cognito_auth_instance):
+        with pytest.raises(HTTPException) as exc_info:
+            await cognito_auth_instance.validate_token("   ")
+        assert exc_info.value.status_code == 401
+        assert exc_info.value.detail == "Not authenticated"
+
+    @pytest.mark.asyncio
+    async def test_validate_token_with_extra_keys_in_response(self, cognito_auth_instance, sample_user_attributes):
+        with patch.object(cognito_auth_instance.client, 'get_user') as mock_get_user:
+            mock_get_user.return_value = {
+                "UserAttributes": sample_user_attributes,
+                "ExtraKey": "ExtraValue"
+            }
+            result = await cognito_auth_instance.validate_token("test-token-123")
+            assert result["sub"] == "test-user-id"
+            assert result["email"] == "test@example.com" 

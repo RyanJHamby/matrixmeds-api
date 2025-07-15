@@ -16,7 +16,7 @@ class CognitoAuth:
         self.client_id = settings.COGNITO_CLIENT_ID
 
     async def validate_token(self, token: str = None) -> dict:
-        if not token:
+        if not token or (isinstance(token, str) and token.strip() == ""):
             raise HTTPException(
                 status_code=401,
                 detail="Not authenticated"
@@ -25,7 +25,7 @@ class CognitoAuth:
             response = self.client.get_user(AccessToken=token)
             # Check for malformed attributes
             for attr in response["UserAttributes"]:
-                if "Name" not in attr or "Value" not in attr:
+                if not isinstance(attr, dict) or "Name" not in attr or "Value" not in attr:
                     raise HTTPException(
                         status_code=400,
                         detail="Malformed user attribute"
@@ -40,6 +40,8 @@ class CognitoAuth:
                 status_code=401,
                 detail="Invalid token"
             )
+        except HTTPException:
+            raise
         except Exception as e:
             raise HTTPException(
                 status_code=401,
